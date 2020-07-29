@@ -9,14 +9,14 @@
 </head>
 <body class="bg-gray-900 text-white font-semibold">
     <header class="border-b border-gray-800">
-        <nav class="container mx-auto flex items-center justify-between px-4 py-6">
-            <div class="flex items-center">
+        <nav class="container mx-auto flex lg:flex-row flex-col items-center justify-between px-4 py-6">
+            <div class="flex lg:flex-row flex-col items-center">
                 <!-- Logo -->
                 <a href="/">
                     <img src={{ asset('img/logo.png') }} alt="logo" class="w-16">
                 </a>
                 <!-- navlinks -->
-                <ul class="flex ml-16 space-x-8">
+                <ul class="flex lg:ml-16 ml-0 space-x-8 my-5 lg:my-0">
                     <li><a href="#" class="hover:text-gray-400">Games</a></li>
                     <li><a href="#" class="hover:text-gray-400">Reviews</a></li>
                     <li><a href="#" class="hover:text-gray-400">Coming Soon</a></li>
