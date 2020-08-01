@@ -15,11 +15,11 @@ class PopularGames extends Component
         $beforeTwoMonths = Carbon::now()->subMonth(2)->timestamp;
         $afterTwoMonths = Carbon::now()->addMonth(2)->timestamp;
 
-        $query = "fields name, rating, first_release_date, platforms.abbreviation, cover.url;
-        where platforms = (130, 6, 48, 49) & 
-            (first_release_date >= {$beforeTwoMonths} & first_release_date <= {$afterTwoMonths} );
-        sort popularity desc;
-        limit 12;";
+        $query =    "fields slug, name, rating, first_release_date, platforms.abbreviation, cover.url;
+                    where platforms = (130, 6, 48, 49) 
+                    & (first_release_date >= {$beforeTwoMonths} & first_release_date <= {$afterTwoMonths} );
+                    sort popularity desc;
+                    limit 12;";
 
         $this->popularGames = Cache::remember('popular-games', 10, function () use($query) {
             return Http::withHeaders(config('services.igdb'))

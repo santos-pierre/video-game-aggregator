@@ -2,13 +2,13 @@
     @forelse ($popularGames as $game)
         <div class="game mt-8">
             <div class="relative inline-block">
-                <a href="">
+                <a href="{{route('games.show', $game['slug'])}}">
                     <img src={{ Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() }} alt="game cover"
                         class="hover:opacity-75 transition ease-in-out duration-150">
                     <!-- Rating -->
                     @isset($game['rating'])
                         <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
-                            style="right: -20px; bottom: -20px;">
+                            style="right: -15px; bottom: -15px;">
                             <div class="font-semibold text-xs flex justify-center items-center h-full">
                                 {{round($game['rating']).'%'}}
                             </div>
@@ -16,7 +16,7 @@
                     @endisset
                 </a>
             </div>
-            <a href="" class="block text-base font-bold leading-tight hover:text-gray-400 mt-8">{{$game['name']}}</a>
+            <a href="{{route('games.show', $game['slug'])}}" class="block text-base font-bold leading-tight hover:text-gray-400 mt-8">{{$game['name']}}</a>
             @isset($game['platforms'])
                 <div class="text-gray-400 mt-1">
                     @foreach ($game['platforms'] as $platform)

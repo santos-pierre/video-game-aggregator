@@ -14,7 +14,7 @@ class ComingSoon extends Component
     public function loadComingSoonGames () {
         $current = Carbon::now()->timestamp;
 
-        $query = "fields name,summary,rating,first_release_date,platforms.abbreviation,cover.url;
+        $query = "fields name, slug, summary, rating, first_release_date, platforms.abbreviation, cover.url;
                 where platforms = (130, 6, 48, 49) 
                 & first_release_date >= {$current};
                 sort popularity desc;

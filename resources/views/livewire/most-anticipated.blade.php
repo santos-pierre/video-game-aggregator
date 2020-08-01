@@ -1,9 +1,14 @@
 <div wire:init='loadMostAnticipatedGames' class="most-anticipated-container space-y-10 mt-8">
     @forelse ($mostAnticipated as $game)
         <div class="game flex">
-            <a href="">
-                <img src={{ Str::of($game['cover']['url'])->replace('thumb', 'cover_small')->__toString() }} alt="game cover"
+            <a href="{{route('games.show', $game['slug'])}}">
+                @if (array_key_exists('cover',$game))
+                    <img src="{{ Str::of($game['cover']['url'])->replace('thumb', 'cover_small')->__toString() }}"" alt="game cover"
                     class="w-16 hover:opacity-75 transition ease-in-out duration-150">
+                @else
+                    <img src="{{ asset('img/cover_small.png') }}"" alt="game cover"
+                    class="w-16 hover:opacity-75 transition ease-in-out duration-150">
+                @endif
             </a>
             <div class="ml-4">
                 <a href="" class="block text-sm font-bold hover:text-gray-400"> {{$game['name']}}</a>

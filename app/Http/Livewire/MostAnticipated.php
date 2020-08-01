@@ -15,7 +15,7 @@ class MostAnticipated extends Component
         $current = Carbon::now()->timestamp;
         $afterFourMonths = Carbon::now()->addMonth(4)->timestamp;
 
-        $query = "fields name,rating,first_release_date,platforms.abbreviation,cover.url;
+        $query = "fields slug, name,rating,first_release_date,platforms.abbreviation,cover.url;
                 where platforms = (130, 6, 48, 49) 
                 & (first_release_date >= {$current} & first_release_date <= {$afterFourMonths} );
                 sort popularity desc;

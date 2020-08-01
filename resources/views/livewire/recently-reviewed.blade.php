@@ -2,7 +2,7 @@
     @forelse ($recentlyReviewed as $game)
         <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
             <div class="relative flex-none">
-                <a href="">
+                <a href="{{route('games.show', $game['slug'])}}">
                     <img src={{ Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() }} alt="game cover"
                         class="lg:w-48 w-24 hover:opacity-75 transition ease-in-out duration-150">
                     <!-- Rating -->
