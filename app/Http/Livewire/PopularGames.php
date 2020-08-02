@@ -4,6 +4,7 @@ namespace App\Http\Livewire;
 
 use Carbon\Carbon;
 use Livewire\Component;
+use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
 use Illuminate\Support\Facades\Cache;
 
@@ -21,12 +22,25 @@ class PopularGames extends Component
                     sort popularity desc;
                     limit 12;";
 
-        $this->popularGames = Cache::remember('popular-games', 10, function () use($query) {
+        $unformattedGames = Cache::remember('popular-games', 10, function () use($query) {
             return Http::withHeaders(config('services.igdb'))
             ->withOptions([
             'body' => $query
             ])->get('https://api-v3.igdb.com/games')->json();
         });
+
+        $this->popularGames = $this->formatForView($unformattedGames);
+
+    }
+
+    private function formatForView ($games) {
+        return collect($games)->map( function ($game) {
+            return collect($game)->merge([
+                'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
+                'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ')  : "N/A",
+                'rating' => isset($game['rating']) ? round($game['rating']).'%' : null
+            ]);
+        })->toArray();
     }
 
     public function render()
