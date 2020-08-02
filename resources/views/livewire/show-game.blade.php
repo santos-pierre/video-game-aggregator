@@ -1,68 +1,33 @@
 <div class="container mx-auto px-4">
     <div class="game-details border-b border-gray-800 pb-12 flex flex-col lg:flex-row">
         <div class="flex-none">
-            @if (array_key_exists('cover',$game[0]))
-                <img src="{{ Str::of($game[0]['cover']['url'])->replace('thumb', 'cover_big')->__toString() }}"" alt="game cover"
-                    class="hover:opacity-75 transition ease-in-out duration-150">
-            @else
-                <img src="{{ asset('img/cover_big.png') }}"" alt="game cover"
-                class="hover:opacity-75 transition ease-in-out duration-150">
-            @endif
+            <img src="{{$game['coverImageUrl']}}"" alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
         </div>
         <div class="ml-0 lg:ml-12 lg:mr-64 mr-0">
-            <h2 class="font-semibold text-4xl leading-tight lg:mt-0 mt-2">{{$game[0]['name']}}</h2>
+            <h2 class="font-semibold text-4xl leading-tight lg:mt-0 mt-2">{{$game['name']}}</h2>
             <div class="text-gray-400">
-                @isset($game[0]['genres'])
-                    <span>
-                        @foreach ($game[0]['genres'] as $genre)
-                            {{$genre['name']}},
-                        @endforeach
-                    </span>
-                    &middot;
-                @endisset
-                @isset($game[0]['involved_companies'])
-                    <span>
-                        @foreach ($game[0]['involved_companies'] as $company)
-                            {{$company['company']['name']}},                            
-                        @endforeach
-                    </span>
-                    &middot;
-                @endisset
-                @isset($game[0]['platforms'])
-                    <span>
-                        @foreach ($game[0]['platforms'] as $platform)
-                            @isset($platform["abbreviation"])
-                                {{$platform["abbreviation"].','}}
-                            @endisset
-                        @endforeach
-                    </span>
-                @endisset
-                </span>
+                <span>{{$game['genres']}}</span>
+                &middot;
+                <span>{{$game['involved_companies']}}</span>
+                &middot;
+                <span>{{$game['platforms']}}</span>
             </div>
             <div class="flex flex-wrap items-center mt-8">
                 <div class="flex items-center">
                     <div class="h-16 w-16 bg-gray-800 rounded-full"> 
                         <div class="font-bold text-xs flex justify-center items-center h-full">
-                            @if (array_key_exists('rating',$game[0]))
-                                {{round($game[0]['rating']).'%'}} 
-                            @else
-                                N.A
-                            @endif
+                            {{$game['rating']}}
                         </div>
                     </div>
-                    <div class="ml-4 text-xs">Member <br> Score</div>
+                    <div class="ml-4 text-sm font-bold">Member <br> Score</div>
                 </div>
                 <div class="flex items-center ml-12">
                     <div class="h-16 w-16 bg-gray-800 rounded-full"> 
                         <div class="font-bold text-xs flex justify-center items-center h-full">
-                            @if (array_key_exists('aggregate_rating',$game[0]))
-                                {{round($game[0]['aggregate_rating']).'%'}} 
-                            @else
-                                N.A
-                            @endif
+                            {{$game['aggregated_rating']}}
                         </div>
                     </div>
-                    <div class="ml-4 text-xs">Critics <br> Score</div>
+                    <div class="ml-4 text-sm font-bold">Critics <br> Score</div>
                 </div>
                 <div class="flex items-center space-x-4 mt-6 lg:mt-0 lg:ml-12 ml-0">
                     <div class="rounded-full bg-gray-800 w-8 h-8 flex justify-center items-center">
@@ -88,13 +53,7 @@
                 </div>
                 <div class="flex flex-col space-y-3">
                     <p class="lg:mt-12 mt-4">
-                        @if (array_key_exists('storyline',$game[0]))
-                            {{$game[0]['storyline']}}
-                        @elseif (array_key_exists('summary',$game[0]))
-                            {{$game[0]['summary']}}
-                        @else
-                            No description for this game.
-                        @endif
+                        {{$game['summary']}}
                     </p>
                     <div class="mt-12">
                         <button class="flex font-bold bg-blue-500 text-white px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
@@ -111,18 +70,18 @@
         <h2 class="text-blue-500 uppercase tracking-wide font-bold">
             Images
         </h2>
-        @if (array_key_exists('screenshots',$game[0]))
+        @if (!isset($game['screenshots']['empty']))
             <div class="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-12 mt-8">
-                @foreach ($game[0]['screenshots'] as $screenshot)
+                @foreach ($game['screenshots'] as $screenshot)
                     <div>
-                        <a href="{{ Str::of($screenshot['url'])->replace('thumb', '1080p')->__toString() }}" target="_blank">
-                            <img src={{ Str::of($screenshot['url'])->replace('thumb', 'screenshot_big')->__toString() }} alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
+                        <a href="{{ $screenshot['screenshot_huge'] }}" target="_blank">
+                            <img src={{ $screenshot['screenshot_big'] }} alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
                         </a>
                     </div>
                 @endforeach
             </div>
         @else
-            <h3 class="text-center text-lg text-gray-500"> No screenshots available for the moment</h3>
+            <h3 class="text-center text-lg text-gray-500">{{$game['screenshots']['empty']}}</h3>
         @endif
     </div>
     <!-- End Image Game -->
@@ -130,45 +89,31 @@
         <h2 class="text-blue-500 uppercase tracking-wide font-bold">
             Similar Games
         </h2>
-        @if (array_key_exists('similar_games',$game[0]))
+        @if (!isset($game['similar_games']['empty']))
             <div class="similar-game text-sm grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-12 pb-16">
-                @foreach ($game[0]['similar_games'] as $game)
+                @foreach ($game['similar_games'] as $game)
                         <div class="game mt-8">
                             <div class="relative inline-block">
                                 <a href="{{route('games.show', $game['slug'])}}">
-                                    @if (array_key_exists('cover',$game))
-                                        <img src="{{ Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() }}"" alt="game cover"
-                                            class="hover:opacity-75 transition ease-in-out duration-150">
-                                    @else
-                                        <img src="{{ asset('img/cover_big.png') }}"" alt="game cover"
-                                        class="hover:opacity-75 transition ease-in-out duration-150">
-                                    @endif
+                                    <img src={{ $game['coverImageUrl']}} alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
                                     <!-- Rating -->
-                                    @isset($game['rating'])
-                                        <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
-                                            style="right: -15px; bottom: -15px;">
-                                            <div class="font-semibold text-xs flex justify-center items-center h-full">
-                                                {{round($game['rating']).'%'}}
-                                            </div>
+                                    <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
+                                        style="right: -15px; bottom: -15px;">
+                                        <div class="font-semibold text-xs flex justify-center items-center h-full">
+                                            {{$game['rating']}}
                                         </div>
-                                    @endisset
+                                    </div>
                                 </a>
                             </div>
                             <a href="{{route('games.show', $game['slug'])}}" class="block text-base font-bold leading-tight hover:text-gray-400 mt-8"> {{$game['name']}}</a>
-                            @isset($game['platforms'])
-                                <div class="text-gray-400 mt-1">
-                                    @foreach ($game['platforms'] as $platform)
-                                        @isset($platform["abbreviation"])
-                                            {{$platform["abbreviation"].','}}
-                                        @endisset
-                                    @endforeach
-                                </div>
-                            @endisset
+                            <div class="text-gray-400 mt-1">
+                                {{$game['platforms']}}
+                            </div>
                         </div>
                  @endforeach
             </div>
         @else
-            <h3 class="text-center text-lg text-gray-500"> This game is currently an hipster game (joke)!</h3>
+            <h3 class="text-center text-lg text-gray-500"> {{$game['similar_games']['empty']}}</h3>
         @endif
     </div>
 </div>
