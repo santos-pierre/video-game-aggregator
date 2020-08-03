@@ -92,25 +92,8 @@
         @if (!isset($game['similar_games']['empty']))
             <div class="similar-game text-sm grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-12 pb-16">
                 @foreach ($game['similar_games'] as $game)
-                        <div class="game mt-8">
-                            <div class="relative inline-block">
-                                <a href="{{route('games.show', $game['slug'])}}">
-                                    <img src={{ $game['coverImageUrl']}} alt="game cover" class="hover:opacity-75 transition ease-in-out duration-150">
-                                    <!-- Rating -->
-                                    <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
-                                        style="right: -15px; bottom: -15px;">
-                                        <div class="font-semibold text-xs flex justify-center items-center h-full">
-                                            {{$game['rating']}}
-                                        </div>
-                                    </div>
-                                </a>
-                            </div>
-                            <a href="{{route('games.show', $game['slug'])}}" class="block text-base font-bold leading-tight hover:text-gray-400 mt-8"> {{$game['name']}}</a>
-                            <div class="text-gray-400 mt-1">
-                                {{$game['platforms']}}
-                            </div>
-                        </div>
-                 @endforeach
+                    <x-game-card-big :game="$game" />
+                @endforeach
             </div>
         @else
             <h3 class="text-center text-lg text-gray-500"> {{$game['similar_games']['empty']}}</h3>

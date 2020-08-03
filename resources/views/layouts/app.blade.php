@@ -18,9 +18,9 @@
                 </a>
                 <!-- navlinks -->
                 <ul class="flex lg:ml-16 ml-0 space-x-8 my-5 lg:my-0">
-                    <li><a href="#" class="hover:text-gray-400">Games</a></li>
-                    <li><a href="#" class="hover:text-gray-400">Reviews</a></li>
-                    <li><a href="#" class="hover:text-gray-400">Coming Soon</a></li>
+                    <li><a href="{{route('games.index')}}" class="hover:text-gray-400">Games</a></li>
+                    <li><span class="text-gray-600 cursor-default">Reviews</span></li>
+                    <li><span class="text-gray-600 cursor-default">Coming Soon</span></li>
                 </ul>
             </div>
             <div class="flex items-center">
@@ -31,7 +31,7 @@
                     </div>
                 </div>
                 <div class="ml-6">
-                    <a href="#"><img src={{ asset('img/fireflies-logo.png') }} alt="" class="rounded-full w-8 h-8 bg-white"></a>
+                    <span><img src={{ asset('img/fireflies-logo.png') }} alt="avatar" class="rounded-full w-8 h-8 bg-white"></span>
                 </div>
             </div>
         </nav>

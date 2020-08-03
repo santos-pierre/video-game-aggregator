@@ -3,8 +3,7 @@
         <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
             <div class="relative flex-none">
                 <a href="{{route('games.show', $game['slug'])}}">
-                    <img src={{ $game['coverImageUrl'] }} alt="game cover"
-                        class="lg:w-48 w-24 hover:opacity-75 transition ease-in-out duration-150">
+                    <img src={{ $game['coverImageUrl'] }} alt="game cover" class="lg:w-48 w-24 hover:opacity-75 transition ease-in-out duration-150">
                     <!-- Rating -->
                     @isset($game['rating'])
                         <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-900 rounded-full"
@@ -17,7 +16,7 @@
                 </a>
             </div>
             <div class="ml-12">
-                <a href="" class="block text-lg font-bold leading-tight hover:text-gray-400 mt-4">{{$game['name']}}</a>
+                <a href="{{route('games.show', $game['slug'])}}" class="block text-lg font-bold leading-tight hover:text-gray-400 mt-4">{{$game['name']}}</a>
                 @isset($game['platforms'])
                     <div class="text-gray-400 mt-1">
                         {{$game['platforms']}}
