@@ -1,4 +1,4 @@
-<div class="flex">
+<div class="flex animate-pulse">
     <div>
         <div class="w-16 h-24 bg-gray-800 rounded"></div>
     </div>

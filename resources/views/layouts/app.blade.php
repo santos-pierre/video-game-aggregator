@@ -24,12 +24,7 @@
                 </ul>
             </div>
             <div class="flex items-center">
-                <div class="relative">
-                    <input type="text" class="bg-gray-800 text-sm rounded-full focus:outline-none focus:shadow-outline px-3 py-1 w-64 pl-8" placeholder="Search ...">
-                    <div class="absolute top-0 flex items-center h-full ml-2">
-                        <svg class="text-gray-400 w-4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
-                    </div>
-                </div>
+                <livewire:search-games />
                 <div class="ml-6">
                     <span><img src={{ asset('img/fireflies-logo.png') }} alt="avatar" class="rounded-full w-8 h-8 bg-white"></span>
                 </div>
@@ -46,5 +41,6 @@
         </div>
     </footer>
     <livewire:scripts>
+    <script src="{{ url(mix('js/app.js')) }}"></script>
 </body>
 </html>

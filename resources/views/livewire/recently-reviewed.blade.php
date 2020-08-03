@@ -31,7 +31,7 @@
         </div>
         @empty
         @foreach (range(1,3) as $game)
-            <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6">
+            <div class="game bg-gray-800 rounded-lg shadow-md flex px-6 py-6 animate-pulse">
                 <div class="relative flex-none">
                     <div class="lg:w-48 w-32 lg:h-56 h-48 bg-gray-700 rounded"></div>
                 </div>
