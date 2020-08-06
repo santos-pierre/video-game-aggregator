@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <meta http-equiv="X-UA-Compatible" content="ie=edge">
-    <title>Video Games</title>
+    <title>Santos Pierre | Games</title>
     <link rel="stylesheet" href={{ asset('css/main.css') }}>
     <livewire:styles>
 </head>
@@ -36,8 +36,8 @@
     </main>
 
     <footer class="border-t border-gray-800">
-        <div class="container mx-auto px-4 py-6">
-            Power By <a href="#" class="underline hover:text-gray-400">IGDB API</a>
+        <div class="container mx-auto px-4 py-6 text-center">
+            Power By <a href="https://api-docs.igdb.com/#about" class="underline hover:text-gray-400">IGDB API</a> &middot; Made with <a href="https://laravel.com/" class="underline hover:text-gray-400">Laravel</a> &amp; <a href="https://laravel-livewire.com/" class="underline hover:text-gray-400">Livewire</a> &middot; <a href="https://github.com/santos-pierre" class="underline hover:text-gray-400">My Github</a>
         </div>
     </footer>
     

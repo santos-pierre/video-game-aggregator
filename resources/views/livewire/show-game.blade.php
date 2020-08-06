@@ -57,12 +57,43 @@
                         <p class="lg:mt-12 mt-4">
                             {{$game['summary']}}
                         </p>
-                        <div class="mt-12">
-                            <button class="flex font-bold bg-blue-500 text-white px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150">
-                                <svg class="w-6 fill-current" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"></path><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg> 
-                                <span class="ml-4"> Play Trailer </span>
-                            </button>
-                        </div>
+                        @isset($game['trailer'])
+                            <div class="mt-12" x-data="{isModalVisible: false}">
+                                <button class="flex font-bold bg-blue-500 text-white px-4 py-4 hover:bg-blue-600 rounded transition ease-in-out duration-150" @click="isModalVisible = true">
+                                    <svg class="w-6 fill-current" viewBox="0 0 24 24"><path d="M0 0h24v24H0z" fill="none"></path><path d="M10 16.5l6-4.5-6-4.5v9zM12 2C6.48 2 2 6.48 2 12s4.48 10 10 10 10-4.48 10-10S17.52 2 12 2zm0 18c-4.41 0-8-3.59-8-8s3.59-8 8-8 8 3.59 8 8-3.59 8-8 8z"></path></svg> 
+                                    <span class="ml-4"> Play Trailer </span>
+                                </button>
+                                <template x-if="isModalVisible">
+                                    <div class="fixed top-0 inset-x-0 px-4 pb-6 sm:inset-0 sm:p-0 sm:flex sm:items-center sm:justify-center z-50" x-show="isModalVisible">
+                                        <div 
+                                            class="fixed inset-0 transition-opacity"
+                                            x-transition:enter="ease-out duration-300"
+                                            x-transition:enter-start="opacity-0"
+                                            x-transition:enter-end="opacity-100"
+                                            x-transition:leave="ease-in duration-200"
+                                            x-transition:leave-start="opacity-100"
+                                            x-transition:leave-end="opacity-0"
+                                        >
+                                        <div class="absolute inset-0 bg-gray-900 opacity-75"></div>
+                                        </div>
+                                        <div 
+                                            class="bg-gray-800 rounded-lg px-4 pt-5 pb-4 shadow-xl transform transition-all sm:p-6" role="dialog" aria-modal="true" aria-labelledby="modal-headline"
+                                            x-transition:enter="ease-out duration-300"
+                                            x-transition:enter-start="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                            x-transition:enter-end="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave="ease-in duration-200"
+                                            x-transition:leave-start="opacity-100 translate-y-0 sm:scale-100"
+                                            x-transition:leave-end="opacity-0 translate-y-4 sm:translate-y-0 sm:scale-95"
+                                            @click.away="isModalVisible = false"
+                                        >
+                                            <div class="responsive-container overflow-hidden relative">
+                                                <iframe width="560" height="315" src={{$game['trailer']}} frameborder="0" allow="accelerometer; autoplay; encrypted-media; gyroscope; picture-in-picture" allowfullscreen></iframe>
+                                            </div>
+                                        </div>
+                                    </div>
+                                </template>
+                            </div>
+                        @endisset
                     </div>
                 </div>
             </div>
@@ -111,7 +142,7 @@
                 <div class="text-transparent mt-3">
                     <span class="rounded bg-gray-800">My genres</span>
                     &middot;
-                    <span class="rounded bg-gray-800">My awesmoe company</span>
+                    <span class="rounded bg-gray-800">My awesome company</span>
                     &middot;
                     <span class="rounded bg-gray-800">My awesome platforms</span>
                 </div>

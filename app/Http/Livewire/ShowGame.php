@@ -14,16 +14,6 @@ class ShowGame extends Component
 
     public function mount($slug){
         $this->slug = $slug;
-        // $this->emit('memberCritics', [
-        //     'slug' => 'memberCritics',
-        //     'rating' => $this->game['rating'] / 100
-        // ]);
-
-        // $this->emit('aggregateCritics', [
-        //     'slug' => 'aggregateCritics',
-        //     'rating' => $this->game['aggregated_rating'] / 100
-        // ]);
-
     }
 
     public function loadGame () {
@@ -54,10 +44,12 @@ class ShowGame extends Component
             'rating' => $this->game['rating'] / 100
         ]);
 
-        collect($this->game['similar_games'])->filter()->each(function ($game){
+        collect($this->game['similar_games'])->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
             $this->emit('similarGame', [
                 'slug' => $game['slug'],
-                'rating' => $game['rating'] / 100
+                'rating' => $game['rating'] / 100 
             ]);
         });
     }
@@ -78,11 +70,12 @@ class ShowGame extends Component
                         'screenshot_big' => Str::of($screenshot['url'])->replace('thumb', 'screenshot_big')->__toString()
                     ];
                 })->take(9) : collect(['empty' => "No screenshots available for the moment"]),
+            'trailer' => isset($game['videos'][0]) ? 'https://youtube.com/embed/'.$game['videos'][0]['video_id'] : null,
             'similar_games' => isset($game['similar_games']) ? collect($game['similar_games'])->map(function ($similar_game) {
                 return [
                     'name' => $similar_game['name'],
                     'coverImageUrl' => isset($similar_game['cover']['url']) ? Str::of($similar_game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
-                    'rating' => isset($similar_game['rating']) ? round($similar_game['rating']) : 'N/A',
+                    'rating' => isset($similar_game['rating']) ? round($similar_game['rating']) : null,
                     'platforms' => isset($similar_game['platforms']) ? collect($similar_game['platforms'])->pluck('name')->filter()->implode(', ') : "No platforms",
                     'slug' => $similar_game['slug']
                 ];
