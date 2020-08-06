@@ -31,6 +31,15 @@ class RecentlyReviewed extends Component
         });
 
         $this->recentlyReviewed = $this->formatToView($unformattedGames);
+
+        collect($this->recentlyReviewed)->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
+            $this->emit('reviewedGameRating', [
+                'slug' => $game['slug'],
+                'rating' => $game['rating'] / 100
+            ]);
+        });
     }
 
     private function formatToView ($games) {
@@ -38,7 +47,7 @@ class RecentlyReviewed extends Component
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
                 'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ')  : "N/A",
-                'rating' => isset($game['rating']) ? round($game['rating']).'%' : null,
+                'rating' => isset($game['rating']) ? round($game['rating']) : null,
                 'summary' => isset($game['summary']) ? $game['summary'] : "No description for the moment",
             ]);
         })->toArray();

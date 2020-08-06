@@ -31,6 +31,14 @@ class PopularGames extends Component
 
         $this->popularGames = $this->formatForView($unformattedGames);
 
+        collect($this->popularGames)->filter(function ($game) {
+            return $game['rating'];
+        })->each(function ($game) {
+            $this->emit('popularGameRating', [
+                'slug' => $game['slug'],
+                'rating' => $game['rating'] / 100
+            ]);
+        });
     }
 
     private function formatForView ($games) {
@@ -38,7 +46,7 @@ class PopularGames extends Component
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
                 'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ')  : "N/A",
-                'rating' => isset($game['rating']) ? round($game['rating']).'%' : null
+                'rating' => isset($game['rating']) ? round($game['rating']) : null
             ]);
         })->toArray();
     }

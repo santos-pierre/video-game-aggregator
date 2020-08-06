@@ -40,7 +40,9 @@
             Power By <a href="#" class="underline hover:text-gray-400">IGDB API</a>
         </div>
     </footer>
+    
     <livewire:scripts>
     <script src="{{ url(mix('js/app.js')) }}"></script>
+    @stack('scripts')
 </body>
 </html>

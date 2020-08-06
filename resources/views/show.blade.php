@@ -1,6 +1,13 @@
-@extends('layouts.app')
+{{-- @extends('layouts.app')
 
 
 @section('content')
     <livewire:show-game slug={{$slug}}>
-@endsection
+
+        @push('scripts')
+            <x-rating-progress-bar event="aggregateCritics" />
+        @endpush
+        @push('scripts')
+            <x-rating-progress-bar event="memberCritics" />
+        @endpush
+@endsection --}}

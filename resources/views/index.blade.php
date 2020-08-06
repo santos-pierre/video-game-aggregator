@@ -6,6 +6,9 @@
     <!-- Start popular game -->
     <h2 class="text-blue-500 uppercase tracking-wide font-bold">Popular Games</h2>
     <livewire:popular-games>
+    @push('scripts')
+        <x-rating-progress-bar event="popularGameRating" />
+    @endpush
     <!-- End Popular Game -->
     <div class="flex lg:flex-row flex-col my-10">
         <!-- Recently Reviewed -->
@@ -14,6 +17,9 @@
                 Recently Reviewed
             </h2>
             <livewire:recently-reviewed>
+            @push('scripts')
+                <x-rating-progress-bar event="reviewedGameRating" />
+            @endpush
         </div>
         <!-- End Recently Reviewed -->
         <!-- Side bar -->

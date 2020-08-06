@@ -15,6 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/','index')->name('games.index');
 
-Route::get('/game/{slug}', function ($slug) {
-    return view('show',['slug' => $slug]);
-})->name('games.show');
+Route::livewire('game/{slug}','show-game')->name('games.show');

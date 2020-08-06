@@ -6,8 +6,7 @@
             @isset($game['rating'])
                 <div class="absolute bottom-0 right-0 w-16 h-16 bg-gray-800 rounded-full"
                     style="right: -15px; bottom: -15px;">
-                    <div class="font-semibold text-xs flex justify-center items-center h-full">
-                        {{$game['rating']}}
+                    <div id="{{$game['slug']}}" class="font-semibold text-xs flex justify-center items-center h-full">
                     </div>
                 </div>
             @endisset

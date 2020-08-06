@@ -10,12 +10,27 @@ use Illuminate\Support\Facades\Cache;
 class ShowGame extends Component
 {
     public $game = [];
+    public $slug = '';
 
     public function mount($slug){
+        $this->slug = $slug;
+        // $this->emit('memberCritics', [
+        //     'slug' => 'memberCritics',
+        //     'rating' => $this->game['rating'] / 100
+        // ]);
+
+        // $this->emit('aggregateCritics', [
+        //     'slug' => 'aggregateCritics',
+        //     'rating' => $this->game['aggregated_rating'] / 100
+        // ]);
+
+    }
+
+    public function loadGame () {
         $query = "fields slug, name, storyline, summary, websites.url, videos.video_id,involved_companies.company.name, rating, platforms.abbreviation, genres.name, 
                 screenshots.url, cover.url, aggregated_rating, 
                 similar_games.name, similar_games.platforms.name, similar_games.cover.url, similar_games.slug, similar_games.rating;
-                where slug=\"{$slug}\";";
+                where slug=\"{$this->slug}\";";
 
         $unformattedGame = Http::withHeaders(config('services.igdb'))
             ->withOptions([
@@ -29,6 +44,22 @@ class ShowGame extends Component
             
         $this->game = $this->formatToView($unformattedGame[0]);
 
+        $this->emit('memberCritics', [
+            'slug' => 'memberCritics',
+            'rating' => $this->game['rating'] / 100
+        ]);
+
+        $this->emit('aggregatedCritics', [
+            'slug' => 'aggregatedCritics',
+            'rating' => $this->game['rating'] / 100
+        ]);
+
+        collect($this->game['similar_games'])->filter()->each(function ($game){
+            $this->emit('similarGame', [
+                'slug' => $game['slug'],
+                'rating' => $game['rating'] / 100
+            ]);
+        });
     }
 
     private function formatToView($game){
@@ -38,8 +69,8 @@ class ShowGame extends Component
             'genres' => isset($game['genres']) ? collect($game['genres'])->pluck('name')->filter()->implode(', ') : "No genres",
             'involved_companies' => isset($game['involved_companies']) ? collect($game['involved_companies'])->pluck('company.name')->implode(', ') : "No companies",
             'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ') : "No platforms",
-            'rating' => isset($game['rating']) ? Str::of(round($game['rating']))->append('%')->__toString() : 'N/A',
-            'aggregated_rating' => isset($game['aggregated_rating']) ? Str::of(round($game['aggregated_rating']))->append('%')->__toString() : 'N/A',
+            'rating' => isset($game['rating']) ? round($game['rating']) : null,
+            'aggregated_rating' => isset($game['aggregated_rating']) ? round($game['aggregated_rating']) : null,
             'summary' => isset($game['summary']) ? $game['summary'] : "No description for the moment",
             'screenshots' => isset($game['screenshots']) ? collect($game['screenshots'])->map(function ($screenshot) {
                     return [
@@ -51,7 +82,7 @@ class ShowGame extends Component
                 return [
                     'name' => $similar_game['name'],
                     'coverImageUrl' => isset($similar_game['cover']['url']) ? Str::of($similar_game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
-                    'rating' => isset($similar_game['rating']) ? Str::of(round($similar_game['rating']))->append('%')->__toString() : 'N/A',
+                    'rating' => isset($similar_game['rating']) ? round($similar_game['rating']) : 'N/A',
                     'platforms' => isset($similar_game['platforms']) ? collect($similar_game['platforms'])->pluck('name')->filter()->implode(', ') : "No platforms",
                     'slug' => $similar_game['slug']
                 ];
