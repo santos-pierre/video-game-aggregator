@@ -41,7 +41,7 @@ class ShowGame extends Component
 
         $this->emit('aggregatedCritics', [
             'slug' => 'aggregatedCritics',
-            'rating' => $this->game['rating'] / 100
+            'rating' => $this->game['aggregated_rating'] / 100
         ]);
 
         collect($this->game['similar_games'])->filter(function ($game) {
@@ -80,7 +80,32 @@ class ShowGame extends Component
                     'slug' => $similar_game['slug']
                 ];
             })->take(6) : collect(['empty' => "This game is currently an hipster game (joke)!"]),
+            'socials' => [
+                'website' => $this->getSocialWebsiteUrl($game),
+                'facebook' =>  $this->getSocialWebsiteUrl($game,'facebook'),
+                'twitter' => $this->getSocialWebsiteUrl($game,'twitter'),
+                'instagram' => $this->getSocialWebsiteUrl($game,'instagram'),
+            ],
         ])->toArray();
+    }
+
+    private function getSocialWebsiteUrl($game, $social=null) {
+        if ($social) {
+            $website = collect($game['websites'])->filter(function ($website) use ($social) {
+                return Str::contains($website['url'],$social);
+            })->first();
+            if (isset($website['url'])) {
+                return $website['url'];
+            }else{
+                return null;
+            }
+        }else{
+            if (isset(collect($game['websites'])->first()['url'])) {
+                return collect($game['websites'])->first()['url'];
+            }else{
+                return null;
+            }
+        }
     }
 
     public function render()
