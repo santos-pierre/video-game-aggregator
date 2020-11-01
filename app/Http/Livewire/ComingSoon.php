@@ -15,20 +15,22 @@ class ComingSoon extends Component
     public function loadComingSoonGames () {
         $current = Carbon::now()->timestamp;
 
-        $query = "fields name, slug, first_release_date, cover.url;
-                where platforms = (130, 6, 48, 49) 
-                & first_release_date >= {$current};
-                sort popularity desc;
-                limit 4;";
-
-        $unformattedGame = Cache::remember('coming-soon-games', 10, function () use($query) {
-            return Http::withHeaders(config('services.igdb'))
-            ->withOptions([
-            'body' => $query
-            ])->get('https://api-v3.igdb.com/games')->json();
+        $query = "fields name, cover.url, first_release_date, platforms.abbreviation, rating, rating_count, summary, slug;
+        where platforms = (48,49,130,6)
+        & (first_release_date >= {$current}
+        );
+        sort first_release_date asc;
+        limit 4;";
+        
+        $unformattedGames = Cache::remember('coming-soon-games', 10, function () use($query) {
+            return Http::withHeaders(config('services.igdb.headers'))
+            ->withBody(
+                $query, "text/plain"
+            )->post(config('services.igdb.endpoint'))
+            ->json();
         });
 
-        $this->comingSoon = $this->formatToView($unformattedGame);
+        $this->comingSoon = $this->formatToView($unformattedGames);
     }
 
     private function formatToView ($games) {

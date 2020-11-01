@@ -16,17 +16,17 @@ class PopularGames extends Component
         $beforeTwoMonths = Carbon::now()->subMonth(2)->timestamp;
         $afterTwoMonths = Carbon::now()->addMonth(2)->timestamp;
 
-        $query =    "fields slug, name, rating, first_release_date, platforms.abbreviation, cover.url;
-                    where platforms = (130, 6, 48, 49) 
-                    & (first_release_date >= {$beforeTwoMonths} & first_release_date <= {$afterTwoMonths} );
-                    sort popularity desc;
+        $query =    "fields slug, name, rating, first_release_date, platforms.abbreviation, cover.url, total_rating_count;
+                    where platforms = (130, 6, 48, 49)
+                    & (first_release_date >= {$beforeTwoMonths}
+                    & first_release_date < {$afterTwoMonths}
+                    & total_rating_count > 5);
+                    sort total_rating_count desc;
                     limit 12;";
 
         $unformattedGames = Cache::remember('popular-games', 10, function () use($query) {
-            return Http::withHeaders(config('services.igdb'))
-            ->withOptions([
-            'body' => $query
-            ])->get('https://api-v3.igdb.com/games')->json();
+            return Http::withHeaders(config('services.igdb.headers'))
+            ->withBody($query, 'text/plain')->post(config('services.igdb.url').'/games')->json();
         });
 
         $this->popularGames = $this->formatForView($unformattedGames);

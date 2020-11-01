@@ -32,7 +32,7 @@
         </nav>
     </header>
     <main class="py-8">
-        {{ $slot }}
+        @yield('content')
     </main>
 
     <footer class="border-t border-gray-800">

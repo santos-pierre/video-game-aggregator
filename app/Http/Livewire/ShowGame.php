@@ -5,7 +5,6 @@ namespace App\Http\Livewire;
 use Livewire\Component;
 use Illuminate\Support\Str;
 use Illuminate\Support\Facades\Http;
-use Illuminate\Support\Facades\Cache;
 
 class ShowGame extends Component
 {
@@ -22,10 +21,7 @@ class ShowGame extends Component
                 similar_games.name, similar_games.platforms.name, similar_games.cover.url, similar_games.slug, similar_games.rating;
                 where slug=\"{$this->slug}\";";
 
-        $unformattedGame = Http::withHeaders(config('services.igdb'))
-            ->withOptions([
-                'body' => $query
-            ])->get('https://api-v3.igdb.com/games')->json();
+        $unformattedGame = Http::withHeaders(config('services.igdb.headers'))->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
 
 
         if (!$unformattedGame) {

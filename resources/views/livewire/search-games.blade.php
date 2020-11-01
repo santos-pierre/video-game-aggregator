@@ -1,13 +1,13 @@
-<div class="flex flex-col" x-data="{open: false}">
-  <div class="relative">
-      <input wire:model="search" type="text" class="bg-gray-800 text-sm rounded-full focus:outline-none focus:shadow-outline px-3 py-1 w-64 pl-8" placeholder="Search ..." @click="open = true" @click.away="open=false">
+<div class="flex flex-col" x-data="{ open: @entangle('search') }">
+  <div class="relative" >
+      <input wire:model="search" type="text" class="bg-gray-800 text-sm rounded-full focus:outline-none focus:shadow-outline px-3 py-1 w-64 pl-8" placeholder="Search ..." @click.away="$wire.set('search', '')">
       <div class="absolute top-0 flex items-center h-full ml-2">
           <svg class="text-gray-400 w-4" fill="none" stroke-linecap="round" stroke-linejoin="round" stroke-width="2" viewBox="0 0 24 24" stroke="currentColor"><path d="M21 21l-6-6m2-5a7 7 0 11-14 0 7 7 0 0114 0z"/></svg>
       </div>
   </div>
   <div x-show="open" 
-        class="bg-gray-800 border border-blue-500 h-64 w-64 absolute z-50 mt-10 rounded-sm overflow-scroll overflow-x-hidden hidden" style="scrollbar-width: none;"
-        :class="{'hidden': !open}">
+        class="bg-gray-800 border border-blue-500 h-64 w-64 absolute z-50 mt-10 rounded-sm overflow-scroll overflow-x-hidden" 
+        style="scrollbar-width: none;">
       <ul class="game-list space-y-2">
           @forelse ($gamesResult as $game)
             <li>

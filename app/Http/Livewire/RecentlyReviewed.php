@@ -16,18 +16,16 @@ class RecentlyReviewed extends Component
         $beforeTwoMonths = Carbon::now()->subMonth(2)->timestamp;
         $afterTwoMonths = Carbon::now()->addMonth(2)->timestamp;
 
-        $query = "fields slug, storyline, name, summary, rating, first_release_date, platforms.abbreviation, cover.url;
+        $query = "fields slug, storyline, name, summary, rating, first_release_date, platforms.abbreviation, cover.url, total_rating_count;
                 where platforms = (130, 6, 48, 49) 
                 & (first_release_date >= {$beforeTwoMonths} & first_release_date <= {$afterTwoMonths} ) 
                 & rating_count < 5;
-                sort popularity desc;
+                sort total_rating_count desc;
                 limit 3;";
 
         $unformattedGames = Cache::remember('recently-reviewed-gPames', 10, function () use($query) {
-            return Http::withHeaders(config('services.igdb'))
-            ->withOptions([
-            'body' => $query
-            ])->get('https://api-v3.igdb.com/games')->json();
+            return Http::withHeaders(config('services.igdb.headers'))
+            ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
         });
 
         $this->recentlyReviewed = $this->formatToView($unformattedGames);

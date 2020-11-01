@@ -15,4 +15,4 @@ use Illuminate\Support\Facades\Route;
 
 Route::view('/','index')->name('games.index');
 
-Route::livewire('game/{slug}','show-game')->name('games.show');
+Route::get('game/{slug}', App\Http\Livewire\ShowGame::class)->name('games.show');

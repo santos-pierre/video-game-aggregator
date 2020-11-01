@@ -16,20 +16,21 @@ class MostAnticipated extends Component
         $current = Carbon::now()->timestamp;
         $afterFourMonths = Carbon::now()->addMonth(4)->timestamp;
 
-        $query = "fields slug, name,rating,first_release_date,platforms.abbreviation,cover.url;
-                where platforms = (130, 6, 48, 49) 
-                & (first_release_date >= {$current} & first_release_date <= {$afterFourMonths} );
-                sort popularity desc;
-                limit 4;";
+        $query = "fields name, cover.url, first_release_date, total_rating_count, platforms.abbreviation, rating, rating_count, summary, slug;
+                    where platforms = (48,49,130,6)
+                    & (first_release_date >= {$current}
+                    & first_release_date < {$afterFourMonths}
+                    );
+                    sort total_rating_count desc;
+                    limit 4;";
 
-        $unformattedGame = Cache::remember('most-anticipated-games', 10, function () use($query) {
-            return Http::withHeaders(config('services.igdb'))
-            ->withOptions([
-            'body' => $query
-            ])->get('https://api-v3.igdb.com/games')->json();
+        $mostAnticipatedGames = Cache::remember('most-anticipated-games', 10, function () use($query) {
+            return Http::withHeaders(config('services.igdb.headers'))
+            ->withBody($query,'text/plain')->post(config('services.igdb.endpoint'))->json();
         });
 
-        $this->mostAnticipated = $this->formatToView($unformattedGame);
+
+        $this->mostAnticipated = $this->formatToView($mostAnticipatedGames);
 
     }
 
