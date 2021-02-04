@@ -1,4 +1,4 @@
-<div wire:init='loadPopularGames' class="popular-game text-sm grid lg:grid-cols-6 md:grid-cols-4 grid-cols-2 gap-12 border-b border-gray-800 pb-16">
+<div wire:init='loadPopularGames' class="grid grid-cols-2 gap-12 pb-16 text-sm border-b border-gray-800 popular-game lg:grid-cols-6 md:grid-cols-4">
     @forelse ($popularGames as $game)
         <x-game-card-big :game="$game" />
         @empty

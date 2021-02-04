@@ -10,15 +10,16 @@ class SearchGames extends Component
     public $search = '';
     public $gamesResult = [];
 
-    public function updatedSearch () {
+    public function updatedSearch()
+    {
         $query = "
                     search \"{$this->search}\";
                     fields name, slug, first_release_date, cover.url;
                     limit 6;
                 ";
 
-        $this->gamesResult = Http::withHeaders(config('services.igdb.headers'))
-            ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
+        $this->gamesResult = collect(Http::withHeaders(config('services.igdb.headers'))
+            ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json());
     }
 
     public function render()

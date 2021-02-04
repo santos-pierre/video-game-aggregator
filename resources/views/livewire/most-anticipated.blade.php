@@ -1,4 +1,4 @@
-<div wire:init='loadMostAnticipatedGames' class="most-anticipated-container space-y-10 mt-8">
+<div wire:init='loadMostAnticipatedGames' class="mt-8 space-y-10 most-anticipated-container">
     @forelse ($mostAnticipated as $game)
         <x-game-card-small :game="$game" />
         @empty

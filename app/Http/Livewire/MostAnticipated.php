@@ -12,7 +12,8 @@ class MostAnticipated extends Component
 {
     public $mostAnticipated = [];
 
-    public function loadMostAnticipatedGames () {
+    public function loadMostAnticipatedGames()
+    {
         $current = Carbon::now()->timestamp;
         $afterFourMonths = Carbon::now()->addMonth(4)->timestamp;
 
@@ -24,23 +25,23 @@ class MostAnticipated extends Component
                     sort total_rating_count desc;
                     limit 4;";
 
-        $mostAnticipatedGames = Cache::remember('most-anticipated-games', 10, function () use($query) {
+        $mostAnticipatedGames = Cache::remember('most-anticipated-games', 10, function () use ($query) {
             return Http::withHeaders(config('services.igdb.headers'))
-            ->withBody($query,'text/plain')->post(config('services.igdb.endpoint'))->json();
+            ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
         });
 
 
         $this->mostAnticipated = $this->formatToView($mostAnticipatedGames);
-
     }
 
-    private function formatToView ($games) {
+    private function formatToView($games)
+    {
         return collect($games)->map(function ($game) {
             return collect($game)->merge([
                 'first_release_date' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : "N/A",
                 'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_small')->__toString() : asset('img/cover_small.png'),
             ]);
-        })->toArray();
+        });
     }
 
     public function render()
