@@ -12,7 +12,8 @@ class ComingSoon extends Component
 {
     public $comingSoon = [];
 
-    public function loadComingSoonGames () {
+    public function loadComingSoonGames()
+    {
         $current = Carbon::now()->timestamp;
 
         $query = "fields name, cover.url, first_release_date, platforms.abbreviation, rating, rating_count, summary, slug;
@@ -21,11 +22,12 @@ class ComingSoon extends Component
         );
         sort first_release_date asc;
         limit 4;";
-        
-        $unformattedGames = Cache::remember('coming-soon-games', 10, function () use($query) {
+
+        $unformattedGames = Cache::remember('coming-soon-games', 10, function () use ($query) {
             return Http::withHeaders(config('services.igdb.headers'))
             ->withBody(
-                $query, "text/plain"
+                $query,
+                "text/plain"
             )->post(config('services.igdb.endpoint'))
             ->json();
         });
@@ -33,13 +35,14 @@ class ComingSoon extends Component
         $this->comingSoon = $this->formatToView($unformattedGames);
     }
 
-    private function formatToView ($games) {
+    private function formatToView($games)
+    {
         return collect($games)->map(function ($game) {
             return collect($game)->merge([
                 'first_release_date' => isset($game['first_release_date']) ? Carbon::parse($game['first_release_date'])->format('M d, Y') : "N/A",
                 'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_small')->__toString() : asset('img/cover_small.png'),
             ]);
-        })->toArray();
+        });
     }
 
     public function render()

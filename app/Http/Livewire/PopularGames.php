@@ -12,7 +12,8 @@ class PopularGames extends Component
 {
     public $popularGames = [];
 
-    public function loadPopularGames () {
+    public function loadPopularGames()
+    {
         $beforeTwoMonths = Carbon::now()->subMonth(2)->timestamp;
         $afterTwoMonths = Carbon::now()->addMonth(2)->timestamp;
 
@@ -24,7 +25,7 @@ class PopularGames extends Component
                     sort total_rating_count desc;
                     limit 12;";
 
-        $unformattedGames = Cache::remember('popular-games', 10, function () use($query) {
+        $unformattedGames = Cache::remember('popular-games', 10, function () use ($query) {
             return Http::withHeaders(config('services.igdb.headers'))
             ->withBody($query, 'text/plain')->post(config('services.igdb.url').'/games')->json();
         });
@@ -41,14 +42,15 @@ class PopularGames extends Component
         });
     }
 
-    private function formatForView ($games) {
-        return collect($games)->map( function ($game) {
+    private function formatForView($games)
+    {
+        return collect($games)->map(function ($game) {
             return collect($game)->merge([
                 'coverImageUrl' => isset($game['cover']['url']) ? Str::of($game['cover']['url'])->replace('thumb', 'cover_big')->__toString() : asset('img/cover_big.png'),
                 'platforms' => isset($game['platforms']) ? collect($game['platforms'])->pluck('abbreviation')->filter()->implode(', ')  : "N/A",
                 'rating' => isset($game['rating']) ? round($game['rating']) : null
             ]);
-        })->toArray();
+        });
     }
 
     public function render()
