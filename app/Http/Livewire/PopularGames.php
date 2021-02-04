@@ -26,7 +26,7 @@ class PopularGames extends Component
                     limit 12;";
 
         $unformattedGames = Cache::remember('popular-games', 10, function () use ($query) {
-            return Http::withHeaders(config('services.igdb.headers'))
+            return Http::withHeaders(config('services.igdb.headers'))->withToken(getAccessToken())
             ->withBody($query, 'text/plain')->post(config('services.igdb.url').'/games')->json();
         });
 

@@ -26,7 +26,7 @@ class MostAnticipated extends Component
                     limit 4;";
 
         $mostAnticipatedGames = Cache::remember('most-anticipated-games', 10, function () use ($query) {
-            return Http::withHeaders(config('services.igdb.headers'))
+            return Http::withHeaders(config('services.igdb.headers'))->withToken(getAccessToken())
             ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
         });
 

@@ -18,7 +18,7 @@ class SearchGames extends Component
                     limit 6;
                 ";
 
-        $this->gamesResult = collect(Http::withHeaders(config('services.igdb.headers'))
+        $this->gamesResult = collect(Http::withHeaders(config('services.igdb.headers'))->withToken(getAccessToken())
             ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json());
     }
 

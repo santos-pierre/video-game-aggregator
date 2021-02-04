@@ -24,7 +24,7 @@ class ComingSoon extends Component
         limit 4;";
 
         $unformattedGames = Cache::remember('coming-soon-games', 10, function () use ($query) {
-            return Http::withHeaders(config('services.igdb.headers'))
+            return Http::withHeaders(config('services.igdb.headers'))->withToken(getAccessToken())
             ->withBody(
                 $query,
                 "text/plain"

@@ -33,7 +33,6 @@ return [
     'igdb' => [
         'headers' => [
             'Client-ID' => env('IGDB_CLIENT_ID'),
-            'Authorization' => 'Bearer ' . env('IGDB_ACCESS_TOKEN'),
         ],
         'url' => env('IGDB_URL'),
         'endpoint' => env('IGDB_ENDPOINT_GAME')

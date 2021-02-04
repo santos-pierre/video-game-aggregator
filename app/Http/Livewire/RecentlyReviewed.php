@@ -25,7 +25,7 @@ class RecentlyReviewed extends Component
                 limit 3;";
 
         $unformattedGames = Cache::remember('recently-reviewed-games', 10, function () use ($query) {
-            return Http::withHeaders(config('services.igdb.headers'))
+            return Http::withHeaders(config('services.igdb.headers'))->withToken(getAccessToken())
             ->withBody($query, 'text/plain')->post(config('services.igdb.endpoint'))->json();
         });
 
